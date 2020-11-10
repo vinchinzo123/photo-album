@@ -24,7 +24,7 @@ const App = () => {
   });
 
   useEffect(() => {
-    // getAllPhotos();
+    getAllPhotos();
   }, []);
 
   const getAllPhotos = async () => {
@@ -85,7 +85,7 @@ const App = () => {
         <Header />
 
         <div className="container pt-24 sm:pt-16  mx-auto flex flex-wrap items-center justify-center content-evenly">
-          <Navigation />
+          <Navigation photos={photos} />
           {/* {loading || photos === [] ? (
           <h1>Loading...</h1>
         ) : !photoFetched ? (

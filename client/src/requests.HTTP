@@ -1,0 +1,19 @@
+
+
+# GET http://localhost:5000/albums 
+
+####
+
+DELETE http://localhost:5000/albums/delete-all
+
+###
+
+GET http://localhost:5000/photos/all
+
+
+###
+
+GET http://localhost:5000/albums
+
+
+###

@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
-const AlbumSchema = new mongoose.Schema(
+const AlbumSchema = mongoose.Schema(
   {
-    String: String,
+    albumName: String,
+    familyName: String,
   },
   {
     timestamps: true,
