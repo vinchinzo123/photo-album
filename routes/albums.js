@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  console.log('test')
+  console.log("test");
   console.log(req.body);
   const albumObj = { albumName: req.body.albumName, familyName: "test_family" };
   const album = new AlbumModel(albumObj);

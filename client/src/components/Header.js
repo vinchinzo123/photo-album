@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { ACTIONS, AuthContext } from "../context/authContext";
+import api from "../utils/api";
 
 export const Header = () => {
+  const [, dispatch] = useContext(AuthContext)
   const [highlight, setHighlight] = useState(false);
-  const [focus, setFocus] = useState(false);
 
   const toHighlight = (e) => {
     setHighlight((highlight) => true);
@@ -20,6 +22,11 @@ export const Header = () => {
     }
   };
   let his = useLocation();
+
+  const logout = () => {
+    dispatch({type: ACTIONS.LOGOUT})
+    api.logout()
+  }
 
   return (
     <div className="fixed w-screen h-24 sm:h-16 bg-indigo-200 text-gray-800 font-light shadow-xl border-b-2 border-transparent  flex flex-col sm:flex-row sm:justify-around sm:align-bottom z-10">
@@ -69,7 +76,9 @@ export const Header = () => {
           </div>
           <div className="flex items-end justify-center">
             <span className=" items-center">
-              <Link to="/">Logout</Link>
+              <Link to="/" onClick={logout}>
+                Logout
+              </Link>
             </span>
           </div>
         </div>

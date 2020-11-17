@@ -1,9 +1,15 @@
+import dontenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import jwt from "jsonwebtoken";
 
 const albums = require("./routes/albums");
 const photos = require("./routes/photos");
+const auth = require("./routes/auth");
+const users = require("./routes/users");
+
+dontenv.config();
 
 mongoose
   .connect("mongodb://localhost", {
@@ -13,7 +19,7 @@ mongoose
   .then(() => console.log(`Mongo connected to family photos`))
   .catch((err) => console.error(err));
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
@@ -27,6 +33,8 @@ app.get("/", (req, res) => {
 
 app.use("/albums", albums);
 app.use("/photos", photos);
+app.use("/auth", auth);
+app.use("/users", users);
 
 app.listen(PORT, () => {
   console.log(`Listening at port http://localhost:${PORT}`);

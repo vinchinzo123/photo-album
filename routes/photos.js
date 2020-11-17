@@ -21,7 +21,6 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  console.log("get all photo");
   const photoList = await PhotoModel.find((err, res) => {
     if (err) return console.error(err);
   });
@@ -29,17 +28,14 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", upload.single("image"), async (req, res) => {
-  console.log(req.body);
-  console.log("test");
   if (!req.file) {
-    res.send("Supply a photo");
+    res.status.json({ success: false, message: "Please supply a photo." });
     return;
   }
   const parentDir = __dirname.slice(0, -7);
   let p = path.join(parentDir + "/uploads/" + req.file.filename);
-  console.log(p);
   let data = fs.readFileSync(p);
-
+  // need to use FS to delete the newly uploade d file
   let photoObj = {
     title: req.body.title,
     family: req.body.family,
@@ -55,15 +51,12 @@ router.post("/", upload.single("image"), async (req, res) => {
   const photo = new PhotoModel(photoObj);
   photo.save((err, photo) => {
     if (err) return console.error(err);
-    res.send("photos uploaded");
+    res.json({message:"photos uploaded"});
   });
-
-  //deletes the photo from the file system
 });
 
 router.get("/all", async (req, res) => {
   const all = await PhotoModel.find();
-  console.log(all);
   res.send(all.map((a, i) => i));
 });
 
@@ -76,6 +69,7 @@ router.delete("/all", async (req, res) => {
   console.log(all);
   res.send("Deleted");
 });
+
 router.get("/:id", async (req, res) => {
   const photo = await PhotoModel.findById({ _id: req.params.id }, (err) => {
     if (err) return console.error(err);
@@ -86,8 +80,6 @@ router.get("/:id", async (req, res) => {
   }
   res.contentType("json");
   res.send(photo);
-  console.log(photo);
-  console.log("ok");
 });
 
 router.put("/:id", async (res, req) => {

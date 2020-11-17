@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export const Home = () => {
-  const [albumName, setAlbumName] = useState("Dummy Album");
   const [albums, setAlbums] = useState([]);
   const [input, setInput] = useState("");
   const [submitCount, setSubmitCount] = useState(0);
