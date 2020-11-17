@@ -1,17 +1,21 @@
-import {ACTIONS} from '../context/authContext'
+import { ACTIONS } from '../context/authContext'
 
 export const AuthReducer = (state, action) => {
-  const {payload } = action
+  const { payload } = action
   console.log(action)
   switch (action.type) {
-    case ACTIONS.LOGIN :
-      return ({...state, loading: true})
+    case ACTIONS.LOGIN:
+      return ({ ...state, loading: true })
     case ACTIONS.LOGIN_SUCCESS:
-      return ({...state, loading: false, user: payload.user, isAuthenticated: true})
+      return ({ ...state, loading: false, user: payload.user, isAuthenticated: true })
     case ACTIONS.LOGIN_FAIL:
-      return ({...state, loading: false, user: {}})
+      return ({ ...state, loading: false, user: {} })
     case ACTIONS.LOGOUT:
-      return ({...state, user: {}, isAuthenticated: false})
+      localStorage.removeItem('authState')
+      localStorage.removeItem('albumState')
+      localStorage.removeItem('userState')
+      localStorage.removeItem('photoState')
+      return ({ ...state, user: {}, isAuthenticated: false })
     default:
       return state
   }

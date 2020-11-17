@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AlbumContext } from "../context";
+import { ACTIONS } from "../context/albumContext";
+import api from "../utils/api";
 
 export const Home = () => {
   const [albums, setAlbums] = useState([]);
+  const [albumState, albumDispatch] = useContext(AlbumContext)
   const [input, setInput] = useState("");
   const [submitCount, setSubmitCount] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:5000/albums/")
-      .then((res) => res.json())
-      .then((data) => setAlbums((albums) => data, ...albums));
+    return async () => {
+      const result = await api.getAlbums()
+      albumDispatch({ type: ACTIONS.GET_ALBUMS, payload: result })
+      // fetch("http://localhost:5000/albums/")
+      //   .then((res) => res.json())
+      //   .then((data) => setAlbums((albums) => data, ...albums));
+
+    }
   }, [submitCount]);
 
   const handleSubmit = async (e) => {
@@ -35,7 +45,7 @@ export const Home = () => {
     setInput((input) => inputValue);
   };
 
-  console.log(albums);
+  console.log(albumState);
   return (
     <div className="text-center">
       Home
@@ -52,8 +62,8 @@ export const Home = () => {
         </form>
       </div>
       <div className="flex flex-wrap justify-center items-center">
-        {albums.length > 0 &&
-          albums.map((album) => {
+        {albumState.length > 0 &&
+          albumState.map((album) => {
             return (
               <div className="shadow-md rounded text-center m-5">
                 <Link to={"/album/" + album.albumName}>

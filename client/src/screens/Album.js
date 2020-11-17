@@ -4,6 +4,7 @@ import { PhotoCardMultiples, PhotoUploadForm } from "../components";
 import { useLocation } from "react-router-dom";
 
 export const Album = (props) => {
+  console.log(props)
   const location = useLocation().pathname.split("/")[2];
 
   let photos = props.photos.filter(
@@ -16,7 +17,7 @@ export const Album = (props) => {
 
   return (
     <div className="pt-20 w-auto text-center">
-      {props.match.params.name}
+      {props.computedMatch.params.name}
       <div className=" flex flex-wrap items-center ">
         {photos[0] &&
           photos.map((photo) => <PhotoCardMultiples photo={photo} />)}

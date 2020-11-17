@@ -1,5 +1,5 @@
-import React, {createContext, useReducer, useEffect} from 'react'
-import {AlbumReducer} from '../reducers'
+import React, { createContext, useReducer, useEffect } from 'react'
+import { AlbumReducer } from '../reducers'
 
 export const AlbumContext = createContext()
 
@@ -7,19 +7,20 @@ export const ACTIONS = {
   GET_ALBUMS: 'get-albums',
   ADD_ALBUM: 'add-album',
   REMOVE_ALBUM: 'remove-album',
-  UPDATE_ALBUM: 'update-album'
+  UPDATE_ALBUM: 'update-album',
+  ALBUM_LOGOUT: 'logout-albums'
 }
 
 function init(initialState) {
-  try{
+  try {
     return JSON.parse(localStorage.getItem('albumState'))
-  } catch{
+  } catch {
     return initialState
   }
 }
 
 
-export const AlbumProvider = ({children}) => {
+export const AlbumProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(
     AlbumReducer, [], init)

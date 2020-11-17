@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getToken} from './functions'
+import { getToken } from './functions'
 
 class API {
 
@@ -66,23 +66,32 @@ class API {
   }
 
   async getUser(userID) {
-    try{
+    try {
       const result = await this.axiosInstance.get(`/users${userID}`)
       return result
-    } catch(err){
+    } catch (err) {
       return err
     }
   }
 
   async updateUser(userObj, userID) {
-    try{
+    try {
       const result = await this.axiosInstance.put(`/users${userID}`, userObj)
       return result
-    } catch(err){
+    } catch (err) {
       return err
     }
   }
-  
+
+  async getAlbums() {
+    try {
+      const result = await this.axiosInstance.get('/albums')
+      return result
+    } catch (err) {
+      console.log(err)
+      return err
+    }
+  }
 
   async login(loginObj) {
     try {
