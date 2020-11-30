@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
-const PhotoSchema = new mongoose.Schema(
+const PhotoSchema = mongoose.Schema(
   {
     title: String,
     family: String,
     path: String,
     tags: Array,
-    photoAlbum: String,
+    album: String,
+    userId: String,
     img: {
       data: Buffer,
       contentType: String,
@@ -17,4 +18,4 @@ const PhotoSchema = new mongoose.Schema(
   }
 );
 
-export const PhotoModel = mongoose.model("Photo", PhotoSchema);
+export const PhotoModel = mongoose.model("Album", PhotoSchema);

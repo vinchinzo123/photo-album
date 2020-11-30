@@ -7,6 +7,15 @@ export const arrayBufferToBase64 = (buffer) => {
   return window.btoa(binary);
 };
 
+export function getToken() {
+  try {
+    const token = localStorage.getItem("token");
+    return token;
+  } catch {
+    return "";
+  }
+}
+
 export const postPhoto = async (photoObj) => {
   console.log(photoObj);
   let response = await fetch(url + "photos", {
