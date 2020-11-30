@@ -12,9 +12,6 @@ export const Landing = () => {
   }
   return (
     <div className="flex-col space-y-10 pt-6">
-      <Link to="/home">
-        <button>Go to home page</button>
-      </Link>
       <Switch>
         <Route exact path='/' >
           <LoginForm />

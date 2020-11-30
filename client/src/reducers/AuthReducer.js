@@ -14,7 +14,6 @@ export const AuthReducer = (state, action) => {
       localStorage.removeItem('authState')
       localStorage.removeItem('albumState')
       localStorage.removeItem('userState')
-      localStorage.removeItem('photoState')
       return ({ ...state, user: {}, isAuthenticated: false })
     default:
       return state

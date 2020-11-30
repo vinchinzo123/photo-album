@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getToken } from './functions'
-
 class API {
 
   axiosInstance = null;
@@ -33,9 +32,9 @@ class API {
     this.axiosInstance = axiosInstance;
   }
 
-  async getPhotos() {
+  async getPhotos(userId) {
     try {
-      const result = await this.axiosInstance.get("/photos");
+      const result = await this.axiosInstance.get(`/photos/user/${userId}`);
       console.log(result);
       return result;
     } catch (err) {
@@ -51,6 +50,37 @@ class API {
     } catch (err) {
       console.log(err);
       return err;
+    }
+  }
+
+  async getAlbumPhotos(albumId) {
+    console.log(albumId)
+    try {
+      const result = await this.axiosInstance.get(`/photos/album/${albumId}`)
+      return result
+    } catch (err) {
+      console.log(err)
+      return err
+    }
+  }
+
+  async getSearchedPhotos(userId, term) {
+    try {
+      const result = await this.axiosInstance.get(`photos/search/${userId}/${term}`)
+      console.log(result)
+      return result
+    } catch (err) {
+      console.log(err)
+      return err
+    }
+  }
+  async deletePhoto(photoId) {
+    try {
+      const result = await this.axiosInstance.delete(`/photos/${photoId}`)
+      return result
+    } catch (err) {
+      console.log(err)
+      return err
     }
   }
   async postUser(userObj) {
@@ -83,9 +113,41 @@ class API {
     }
   }
 
-  async getAlbums() {
+  async getAlbums(userId) {
     try {
-      const result = await this.axiosInstance.get('/albums')
+      const result = await this.axiosInstance.get(`/albums/${userId}`)
+      return result
+    } catch (err) {
+      console.log(err)
+      return err
+    }
+  }
+
+  async getSearchedAlbums(userId, term) {
+    console.log(userId)
+    try {
+      const result = await this.axiosInstance.get(`albums/search/${userId}/${term}`)
+      console.log(result)
+      return result
+    } catch (err) {
+      console.log(err)
+      return err
+    }
+  }
+
+  async postAlbum(photoAlbum) {
+    try {
+      const result = await this.axiosInstance.post('/albums', photoAlbum)
+      return result
+    } catch (err) {
+      console.log(err)
+      return err
+    }
+  }
+
+  async deleteAlbum(albumId) {
+    try {
+      const result = await this.axiosInstance.delete(`/albums/${albumId}`)
       return result
     } catch (err) {
       console.log(err)

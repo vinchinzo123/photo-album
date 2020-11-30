@@ -7,6 +7,7 @@ const PhotoSchema = mongoose.Schema(
     path: String,
     tags: Array,
     album: String,
+    userId: String,
     img: {
       data: Buffer,
       contentType: String,

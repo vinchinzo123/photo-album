@@ -5,7 +5,7 @@ import { AuthContext } from '../context'
 import { ACTIONS } from '../context/authContext'
 
 const SignUpForm = () => {
-  const [authState, authDisptach] = useContext(AuthContext)
+  const [, authDisptach] = useContext(AuthContext)
   const [error, setError] = useState(null);
   const [username, bindUsername, resetUsername] = useInput("");
   const [familyname, bindFamilyName, resetFamilyName] = useInput("");
@@ -18,7 +18,8 @@ const SignUpForm = () => {
   ] = useInput("");
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (password === confirmedPassword) {
+    if (password === confirmedPassword && username && familyname && email) {
+      setError(null)
       const userObj = {
         username,
         familyname,
@@ -29,7 +30,6 @@ const SignUpForm = () => {
       authDisptach({ type: ACTIONS.LOGIN })
       try {
         const result = await api.login({ email, password })
-        console.log(result)
         if (result.err && result.err.response.status === 401) {
           setError(() => result.err.response.data.message);
           authDisptach({ type: ACTIONS.LOGIN_FAIL })
@@ -38,7 +38,6 @@ const SignUpForm = () => {
           authDisptach({ type: ACTIONS.LOGIN_FAIL })
         } else {
           authDisptach({ type: ACTIONS.LOGIN_SUCCESS, payload: result })
-          console.log(result);
         }
       } catch {
         authDisptach({ type: ACTIONS.LOGIN_FAIL })
@@ -49,16 +48,20 @@ const SignUpForm = () => {
       resetUsername();
       resetConfirmedPassword();
     }
+    else {
+      setError(() => 'Please fill out all fields')
+    }
   };
   return (
-    <form onSubmit={submitHandler}>
-      <input {...bindUsername} type="text" placeholder="username" />
-      <input {...bindFamilyName} type="text" placeholder="family name" />
-      <input {...bindEmail} type="text" placeholder="email" />
-      <input {...bindPassword} type="text" placeholder="password" />
-      <input
+    <form onSubmit={submitHandler} className="flex-col">
+      {error && error}
+      <input className=" block mb-1" {...bindUsername} type="text" placeholder="username" />
+      <input className=" block mb-1" {...bindFamilyName} type="text" placeholder="family name" />
+      <input className=" block mb-1" {...bindEmail} type="text" placeholder="email" />
+      <input className=" block mb-1" {...bindPassword} type="password" placeholder="password" />
+      <input className=" block mb-1"
         {...bindConfirmedPassword}
-        type="text"
+        type="password"
         placeholder="confirm password"
       />
       <button>Submit</button>

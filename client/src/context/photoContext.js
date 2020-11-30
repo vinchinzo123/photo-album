@@ -13,23 +13,24 @@ export const ACTIONS = {
   PHOTO_LOGOUT: 'logout-photo'
 }
 
-function init(initialState) {
-  try {
-    return JSON.parse(localStorage.getItem('photoState'))
-  } catch {
-    return initialState
-  }
-}
+// function init(initialState) {
+//   try {
+//     return JSON.parse(localStorage.getItem('photoState'))
+//   } catch {
+//     return initialState
+//   }
+// }
 
 
 export const PhotoProvider = ({ children }) => {
 
-  const [state, dispatch] = useReducer(
-    PhotoReducer, [], init)
+  const [state, dispatch] = useReducer(PhotoReducer, [])
+  // const [state, dispatch] = useReducer(
+  //   PhotoReducer, [], init)
 
-  useEffect(() => {
-    localStorage.setItem("photoState", JSON.stringify(state))
-  }, [state])
+  // useEffect(() => {
+  //   localStorage.setItem("photoState", JSON.stringify(state))
+  // }, [state])
 
   return (
     <PhotoContext.Provider value={[state, dispatch]}>

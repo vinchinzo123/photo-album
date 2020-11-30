@@ -7,14 +7,16 @@ import { UserProvider, AuthProvider, AlbumProvider, PhotoProvider } from "./cont
 
 ReactDOM.render(
   <BrowserRouter>
-  <AuthProvider>
-  <UserProvider>
-  <AlbumProvider>
+    <AuthProvider>
+      <UserProvider>
+        <AlbumProvider>
+          <PhotoProvider>
 
-    <App />
-  </AlbumProvider>
-  </UserProvider>
-  </AuthProvider>
+            <App />
+          </PhotoProvider>
+        </AlbumProvider>
+      </UserProvider>
+    </AuthProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );

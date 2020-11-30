@@ -8,9 +8,9 @@ export const UserReducer = (state, action) => {
     case ACTIONS.DELETE_USER:
       return { ...state }
     case ACTIONS.UPDATE_USER:
-      return payload.user
+      return payload
     case ACTIONS.GET_USER:
-      return payload.user
+      return payload
     case ACTIONS.USER_LOGOUT:
       return {}
     default:

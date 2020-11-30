@@ -3,6 +3,7 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 import { PhotoModel } from "../photoModel";
+import { REFUSED } from "dns";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -20,8 +21,8 @@ const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const photoList = await PhotoModel.find((err, res) => {
+router.get("/user/:userId", async (req, res) => {
+  const photoList = await PhotoModel.find({ userId: req.params.userId }, (err, res) => {
     if (err) return console.error(err);
   });
   res.send(photoList);
@@ -41,6 +42,7 @@ router.post("/", upload.single("image"), async (req, res) => {
     family: req.body.family,
     tags: req.body.tags.split(","),
     album: req.body.album,
+    userId: req.body.userId,
     path: p,
     img: {
       data,
@@ -51,7 +53,7 @@ router.post("/", upload.single("image"), async (req, res) => {
   const photo = new PhotoModel(photoObj);
   photo.save((err, photo) => {
     if (err) return console.error(err);
-    res.json({message:"photos uploaded"});
+    res.json(photo);
   });
 });
 
@@ -62,13 +64,20 @@ router.get("/all", async (req, res) => {
 
 router.delete("/all", async (req, res) => {
   const all = await PhotoModel.deleteMany({}, (err) => {
-    if (err) {
-      console.log(err);
-    }
+    if (err) console.log(err)
   });
   console.log(all);
   res.send("Deleted");
 });
+
+router.get("/album/:albumId", async (req, res) => {
+  const albumId = req.params.albumId
+  console.log(req.params)
+  const photos = await PhotoModel.find({ album: albumId }, err => {
+    if (err) return console.error(err)
+  })
+  res.send(photos)
+})
 
 router.get("/:id", async (req, res) => {
   const photo = await PhotoModel.findById({ _id: req.params.id }, (err) => {
@@ -92,6 +101,7 @@ router.put("/:id", async (res, req) => {
 });
 
 router.delete("/:id", async (req, res) => {
+  console.log('delete photo time')
   const id = req.params.id;
   await PhotoModel.deleteOne({ _id: id }, (err) => {
     if (err) return console.error(err);
@@ -119,5 +129,14 @@ router.get("/family/:family", async (req, res) => {
   );
   return;
 });
+
+router.get("/search/:userId/:term", async (req, res) => {
+  const { userId, term } = req.params
+  let termRegex = new RegExp(term, 'gi')
+
+  const photosByTitleAndTag = await PhotoModel.find({ userId }).or([{ title: termRegex }, { tags: termRegex }])
+  console.log('both', photosByTitleAndTag)
+  res.send(photosByTitleAndTag)
+})
 
 module.exports = router;

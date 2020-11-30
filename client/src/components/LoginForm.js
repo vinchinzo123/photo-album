@@ -1,11 +1,13 @@
 import React, { useState, useContext } from "react";
-import { AuthContext } from "../context";
+import { AlbumContext, AuthContext } from "../context";
 import useInput from "../hooks/useInput";
 import api from "../utils/api";
+import { ACTIONS as ALBUM_ACTIONS } from '../context/albumContext'
 import { ACTIONS } from '../context/authContext'
 
 const LoginForm = () => {
-  const [authState, authDisptach] = useContext(AuthContext)
+  const [, authDisptach] = useContext(AuthContext)
+  const [albumState, albumDispatch] = useContext(AlbumContext)
   const [error, setError] = useState(null);
   const [email, bindEmail, resetEmail] = useInput("");
   const [password, bindPassword, resetPassword] = useInput("");
@@ -26,6 +28,8 @@ const LoginForm = () => {
         setError(() => "Unknow error has occured, please try again later");
         authDisptach({ type: ACTIONS.LOGIN_FAIL })
       } else {
+        const albums = await api.getAlbums(result._id)
+        albumDispatch({ type: ALBUM_ACTIONS.GET_ALBUMS, payload: albums })
         authDisptach({ type: ACTIONS.LOGIN_SUCCESS, payload: result })
         console.log(result);
       }
@@ -40,8 +44,8 @@ const LoginForm = () => {
     <form onSubmit={submitHandler}>
       {error && <p>{error}</p>}
       <label htmlFor="login">
-        <input {...bindEmail} type="text" placeholder="email" />
-        <input {...bindPassword} type="text" placeholder="password" />
+        <input className="block mb-1" {...bindEmail} type="text" placeholder="email" />
+        <input className="block mb-1" {...bindPassword} type="password" placeholder="password" />
         <button>LOGIN</button>
       </label>
     </form>

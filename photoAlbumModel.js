@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const AlbumSchema = mongoose.Schema(
   {
+    userId: String,
     albumName: String,
     familyName: String,
   },

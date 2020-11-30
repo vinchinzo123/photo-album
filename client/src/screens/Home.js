@@ -1,51 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AlbumContext } from "../context";
+import AlbumCard from "../components/AlbumCard";
+import { AlbumContext, AuthContext } from "../context";
 import { ACTIONS } from "../context/albumContext";
+import useInput from "../hooks/useInput";
 import api from "../utils/api";
 
 export const Home = () => {
-  const [albums, setAlbums] = useState([]);
+  const [authState,] = useContext(AuthContext)
   const [albumState, albumDispatch] = useContext(AlbumContext)
-  const [input, setInput] = useState("");
-  const [submitCount, setSubmitCount] = useState(0);
+  const [albumInput, bindeAlbumName, resetAlbumName] = useInput("")
 
   useEffect(() => {
-    return async () => {
-      const result = await api.getAlbums()
+    const getAllAlbums = async () => {
+      const result = await api.getAlbums(authState.user._id)
       albumDispatch({ type: ACTIONS.GET_ALBUMS, payload: result })
-      // fetch("http://localhost:5000/albums/")
-      //   .then((res) => res.json())
-      //   .then((data) => setAlbums((albums) => data, ...albums));
-
     }
-  }, [submitCount]);
+    getAllAlbums()
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let albumObj = JSON.stringify({ albumName: input });
-    console.log(albumObj);
-    let response = await fetch("http://localhost:5000/albums", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: albumObj,
-    });
-    console.log(response);
-    setInput(() => "");
-    setSubmitCount((submitCount) => submitCount + 1);
+    console.log(authState)
+    const albumObj = await api.postAlbum({ albumName: albumInput, userId: authState.user._id, familyName: authState.user.familyname })
+    albumDispatch({ type: ACTIONS.ADD_ALBUM, payload: albumObj })
+    resetAlbumName()
   };
 
-  const handleOnChange = (e) => {
-    const inputName = e.target.name;
-    const inputValue = e.target.value;
-    console.log(e.target.value);
-    setInput((input) => inputValue);
-  };
 
-  console.log(albumState);
   return (
     <div className="text-center">
       Home
@@ -53,32 +36,22 @@ export const Home = () => {
         <form className="m-10 p-10" onSubmit={handleSubmit}>
           <label className="">Create Album + </label>
           <input
-            name="albumName"
-            onChange={handleOnChange}
-            value={input}
+            {...bindeAlbumName}
             type="text"
             placeholder="Album Name"
           />
         </form>
       </div>
-      <div className="flex flex-wrap justify-center items-center">
-        {albumState.length > 0 &&
+      <div className="flex flex-wrap justify-center">
+        {albumState && albumState && albumState.length > 0 &&
           albumState.map((album) => {
             return (
-              <div className="shadow-md rounded text-center m-5">
-                <Link to={"/album/" + album.albumName}>
-                  <div className=" w-32 h-32 bg-orange-300"></div>
-                  {album.albumName}
-                </Link>
+              <div>
+                <AlbumCard album={album} albumName={album.albumName} />
               </div>
             );
           })}
-        <div className="shadow-md rounded text-center m-5">
-          <Link to={"/album/all"}>
-            <div className=" w-32 h-32 bg-orange-300"></div>
-            All
-          </Link>
-        </div>
+        <AlbumCard albumName={'All'} />
       </div>
     </div>
   );
