@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# tailwind built main.css
+/client/src/styles/main.css
 # added photos
 /uploads
 # dependencies
